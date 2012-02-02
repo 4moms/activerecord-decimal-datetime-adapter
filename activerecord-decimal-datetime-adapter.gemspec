@@ -8,10 +8,14 @@ Gem::Specification.new do |s|
   s.authors     = ["Benjamin R. Haskell"]
   s.email       = ["bhaskell@4moms.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Deal with dates and times stored as decimals}
+  s.description = <<DESCRIPTION
+The Accpac database uses DECIMAL as the data type for date and time fields.
+Presumably this was to gloss over differences in database drivers in their
+handling of date- and time-related fields.
+DESCRIPTION
 
-  s.rubyforge_project = "activerecord-decimal-datetime-adapter"
+  #s.rubyforge_project = "activerecord-decimal-datetime-adapter"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

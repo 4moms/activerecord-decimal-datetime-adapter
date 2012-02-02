@@ -23,23 +23,17 @@ module ActiveRecord
 
         def define_method_attribute(attr_name)
           if create_decimal_date_attribute?(attr_name, columns_hash[attr_name])
-            method_body, line = <<-FUNCTION, __LINE__ + 1
-              def _#{attr_name}
-                @attributes_cache['#{attr_name}'] ||=
-                  begin
-                    original = _read_attribute('#{attr_name}')
-                    date = original
-                    if date.is_a? Numeric and date.to_s =~ /^(\\d{4})(\\d{2})(\\d{2})/
-                      date = Time.zone.parse([$1,$2,$3].join("-"))
-                    end
-                    date
-                  rescue
-                    original
+            generated_attribute_methods.send(:define_method, attr_name) do
+              @attributes_cache[attr_name] ||=
+                begin
+                  date = read_attribute(attr_name)
+                  if date.is_a? Numeric and date.to_s =~ /^(\d{4})(\d{2})(\d{2})(?:\.0)?$/
+                    DateTime.strptime(date.to_s.split('.')[0], '%Y%m%d')
+                  else
+                    nil
                   end
-              end
-              alias #{attr_name} _#{attr_name}
-            FUNCTION
-            generated_attribute_methods.module_eval(method_body, __FILE__, line)
+                end
+            end
           else
             super
           end
@@ -47,15 +41,14 @@ module ActiveRecord
 
         def define_method_attribute=(attr_name)
           if create_decimal_date_attribute?(attr_name, columns_hash[attr_name])
-            method_body, line = <<-FUNCTION, __LINE__ + 1
-              def _#{attr_name}=(original)
-                date = original
-                date = date.strftime('%Y%m%d').to_i if date.acts_like?(:date)
-                write_attribute(:#{attr_name}, date)
-                @attributes_cache['#{attr_name}'] = original
+            generated_attribute_methods.send(:define_method, "#{attr_name}=") do |new_date|
+              decimal = new_date
+              if decimal.respond_to?(:strftime)
+                decimal = decimal.strftime('%Y%m%d').to_f
               end
-            FUNCTION
-            generated_attribute_methods.module_eval(method_body, __FILE__, line)
+              write_attribute(attr_name, decimal)
+              @attributes_cache[attr_name] = new_date
+            end
           else
             super
           end

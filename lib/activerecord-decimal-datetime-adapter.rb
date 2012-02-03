@@ -5,4 +5,4 @@ require 'active_support/core_ext/object/inclusion'
 
 require 'activerecord-decimal-datetime-adapter/version'
 require 'activerecord-decimal-datetime-adapter/date'
-#require 'activerecord-decimal-datetime-adapter/time'
+require 'activerecord-decimal-datetime-adapter/time'

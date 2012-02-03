@@ -2,9 +2,9 @@
 require 'active_support/core_ext/class/attribute'
 require 'active_support/core_ext/object/inclusion'
 
-module ActiveRecord
-  module AttributeMethods
-    module DecimalDate
+module ActiveRecordDecimalDatetimeAdapter
+   module Date
+#    module DecimalDate
       extend ActiveSupport::Concern
 
       included do
@@ -64,5 +64,7 @@ module ActiveRecord
         end
       end
     end
-  end
+#  end
 end
+
+ActiveRecord::Base.send :include, ActiveRecordDecimalDatetimeAdapter::Date

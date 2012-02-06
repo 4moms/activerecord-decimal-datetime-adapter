@@ -63,18 +63,15 @@ describe 'Date adapter' do
   end
 
   describe 'with invalid dates' do
-    {
-      1230101.0 => Date.civil(123, 1, 1),
-      100000101.0 => Date.civil(10000, 1, 1),
-    }.each do |decimal, date|
-      it "should store the out-of-range date #{date} as nil" do
-        u = Factory :user
-        u.birthdate = date
-        u.save!
-        u.reload
-        u.birthdate.should == nil
-      end
-
+    [
+      1230101.0,    # year too low
+      100000101.0,  # year too high
+      20121301.0,   # month too high
+      20121232.0,   # day too high
+      20120230.0,   # day too high
+      20110229.0,   # no leap day in 2011
+      19000229.0,   # no leap day in 1900
+    ].each do |decimal|
       it "should retrieve the out-of-range decimal #{decimal} as nil" do
         u = Factory :user
         User.update(u.id, :birthdate => decimal)

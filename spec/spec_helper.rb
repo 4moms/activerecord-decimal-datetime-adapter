@@ -21,16 +21,20 @@ RSpec.configure do |config|
 
       create_table :exempts do |t|
         t.integer :birthdate
+        t.integer :birthtime
       end
     end
 
     class User < ActiveRecord::Base
       self.skip_decimal_date_attributes = [ :ignore_date ]
       self.extra_decimal_date_attributes = [ :wrong_date_name ]
+      self.skip_decimal_time_attributes = [ :ignore_time ]
+      self.extra_decimal_time_attributes = [ :wrong_time_name ]
     end
 
     class Exempt < ActiveRecord::Base
       self.decimal_date_attributes = false
+      self.decimal_time_attributes = false
     end
 
     FactoryGirl.find_definitions

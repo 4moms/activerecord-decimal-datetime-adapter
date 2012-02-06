@@ -29,6 +29,8 @@ module ActiveRecordDecimalDatetimeAdapter
                  else
                    nil
                  end
+               rescue
+                 nil
                end
            end
          else

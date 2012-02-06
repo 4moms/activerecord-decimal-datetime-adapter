@@ -24,5 +24,7 @@ DESCRIPTION
 
   s.add_dependency 'activerecord'
   s.add_dependency 'activesupport'
-  s.add_development_dependency "rspec"
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'factory_girl'
+  s.add_development_dependency 'sqlite3'
 end

@@ -5,7 +5,7 @@ module ActiveRecordDecimalDatetimeAdapter
      extend ActiveSupport::Concern
 
      included do
-       cattr_accessor :decimal_date_attributes, :instance_writer => false
+       class_attribute :decimal_date_attributes, :instance_writer => false
        self.decimal_date_attributes = true
 
        class_attribute :extra_decimal_date_attributes, :instance_writer => false

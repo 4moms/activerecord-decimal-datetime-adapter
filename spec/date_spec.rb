@@ -4,9 +4,33 @@ describe 'Date adapter' do
   describe 'column selection' do
     it 'should only apply to columns that look like dates' do
       u = Factory :user
-      u.login_count = 19990101.0
+      u.not_date_count = 19990101.0
       u.save!
-      u.login_count.should == 19990101.0
+      u.not_date_count.should == 19990101.0
+    end
+
+    it 'should ignore columns added to skip_decimal_date_attributes' do
+      decimal = 19990101.0
+      u = Factory :user
+      u.ignore_date = decimal
+      u.save!
+      u.ignore_date.should == decimal
+    end
+
+    it 'should apply to columns added to extra_decimal_date_attributes' do
+      date = Date.civil(1999, 1, 1)
+      u = Factory :user
+      u.wrong_date_name = date
+      u.save!
+      u.wrong_date_name.should == date
+    end
+
+    it 'should not do anything if decimal_date_attributes is false' do
+      decimal = 19990101.0
+      n = Factory :exempt
+      n.birthdate = decimal
+      n.save!
+      n.birthdate.should == decimal
     end
   end
 
